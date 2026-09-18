@@ -288,6 +288,78 @@ $current_user = get_current_user_data();
             min-height: 520px;
         }
 
+        /* Hero Slider Dots */
+        .cs_hero_dots {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+        .cs_hero_dots .slick-dots {
+            display: flex !important;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .cs_hero_dots .slick-dots li button {
+            font-size: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.7);
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+        .cs_hero_dots .slick-dots li.slick-active button {
+            background: #ffffff;
+            border-color: #ffffff;
+            transform: scale(1.3);
+        }
+
+        /* Hero Slider Arrows */
+        .cs_hero_prev_arrow,
+        .cs_hero_next_arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(6px);
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .cs_hero_prev_arrow { left: 24px; }
+        .cs_hero_next_arrow { right: 24px; }
+        .cs_hero_prev_arrow:hover,
+        .cs_hero_next_arrow:hover {
+            background: rgba(255,255,255,0.35);
+            border-color: #ffffff;
+            transform: translateY(-50%) scale(1.1);
+        }
+        @media (max-width: 767px) {
+            .cs_hero_prev_arrow,
+            .cs_hero_next_arrow {
+                width: 36px;
+                height: 36px;
+                font-size: 13px;
+            }
+            .cs_hero_prev_arrow { left: 10px; }
+            .cs_hero_next_arrow { right: 10px; }
+        }
+
         /* -----------------------------------------------------
            MOBILE HAMBURGER DRAWER MENU STYLING (THEME NAVY BG + CENTER ALIGNED + ACCENT HOVER)
         ----------------------------------------------------- */

@@ -62,7 +62,7 @@
     --------------------------------------------------------------*/
     function preloader() {
         $('.cs_preloader').fadeOut();
-        $('cs_preloader_in').delay(150).fadeOut('slow');
+        $('.cs_preloader_in').delay(150).fadeOut('slow');
     }
 
     /*--------------------------------------------------------------
@@ -232,29 +232,73 @@
             });
         }
 
-        // Product Single Slider
-        $('.cs_hero_slider_thumb').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            asNavFor: '.cs_hero_slider_nav',
-            speed: 1000,
-        });
+        // Hero Slider Setup
+        if ($.exists('.cs_hero_slider_thumb')) {
+            var hasHeroNav = $.exists('.cs_hero_slider_nav');
 
-        $('.cs_hero_slider_nav').slick({
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            asNavFor: '.cs_hero_slider_thumb',
-            focusOnSelect: true,
-            arrows: false,
-            vertical: true,
-            responsive: [{
-                breakpoint: 991,
-                settings: {
-                    vertical: false,
-                },
-            }, ],
-        });
+            var heroOptions = {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                dots: true,
+                appendDots: $('.cs_hero_slider_thumb').closest('section').find('.cs_hero_dots'),
+                fade: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                speed: 1000,
+                infinite: true,
+                pauseOnHover: true,
+            };
+
+            if (hasHeroNav) {
+                heroOptions.asNavFor = '.cs_hero_slider_nav';
+            }
+
+            // Ensure background images are set prior to mounting
+            dynamicBackground();
+
+            $('.cs_hero_slider_thumb')
+                .on('init', function() {
+                    // Run after Slick clones slides so all [data-src] elements get backgrounds
+                    dynamicBackground();
+                })
+                .slick(heroOptions);
+
+            // Also apply to any dynamically added/changed slides
+            $('.cs_hero_slider_thumb').on('afterChange', function() {
+                dynamicBackground();
+            });
+
+            // Wire up custom arrow buttons
+            $('#heroPrev, .cs_hero_prev_arrow').off('click').on('click', function(e) {
+                e.preventDefault();
+                $('.cs_hero_slider_thumb').slick('slickPrev');
+            });
+            $('#heroNext, .cs_hero_next_arrow').off('click').on('click', function(e) {
+                e.preventDefault();
+                $('.cs_hero_slider_thumb').slick('slickNext');
+            });
+
+            if (hasHeroNav) {
+                $('.cs_hero_slider_nav').slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    asNavFor: '.cs_hero_slider_thumb',
+                    focusOnSelect: true,
+                    arrows: false,
+                    dots: false,
+                    vertical: true,
+                    infinite: true,
+                    responsive: [{
+                        breakpoint: 991,
+                        settings: {
+                            vertical: false,
+                            slidesToShow: 3,
+                        },
+                    }],
+                });
+            }
+        }
     }
 
     /*--------------------------------------------------------------

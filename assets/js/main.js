@@ -62,7 +62,7 @@
     --------------------------------------------------------------*/
     function preloader() {
         $('.cs_preloader').fadeOut();
-        $('cs_preloader_in').delay(150).fadeOut('slow');
+        $('.cs_preloader_in').delay(150).fadeOut('slow');
     }
 
     /*--------------------------------------------------------------
@@ -232,29 +232,72 @@
             });
         }
 
-        // Product Single Slider
-        $('.cs_hero_slider_thumb').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            asNavFor: '.cs_hero_slider_nav',
-            speed: 1000,
-        });
+        // Hero Slider Setup
+        if ($.exists('.cs_hero_slider_thumb')) {
+            var hasHeroNav = $.exists('.cs_hero_slider_nav');
+            var $heroSlider = $('.cs_hero_slider_thumb');
+            var $heroDots = $heroSlider.closest('section').find('.cs_hero_dots');
 
-        $('.cs_hero_slider_nav').slick({
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            asNavFor: '.cs_hero_slider_thumb',
-            focusOnSelect: true,
-            arrows: false,
-            vertical: true,
-            responsive: [{
-                breakpoint: 991,
-                settings: {
-                    vertical: false,
-                },
-            }, ],
-        });
+            var heroOptions = {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: false,
+                dots: true,
+                appendDots: $heroDots.length ? $heroDots : undefined,
+                fade: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                speed: 800,
+                infinite: true,
+                pauseOnHover: true,
+            };
+
+            if (hasHeroNav) {
+                heroOptions.asNavFor = '.cs_hero_slider_nav';
+            }
+
+            // Ensure background images are set prior to mounting
+            dynamicBackground();
+
+            $heroSlider
+                .on('init', function() {
+                    dynamicBackground();
+                })
+                .on('afterChange', function() {
+                    dynamicBackground();
+                })
+                .slick(heroOptions);
+
+            // Wire up custom arrow buttons
+            $('#heroPrev, .cs_hero_prev_arrow').off('click').on('click', function(e) {
+                e.preventDefault();
+                $heroSlider.slick('slickPrev');
+            });
+            $('#heroNext, .cs_hero_next_arrow').off('click').on('click', function(e) {
+                e.preventDefault();
+                $heroSlider.slick('slickNext');
+            });
+
+            if (hasHeroNav) {
+                $('.cs_hero_slider_nav').slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    asNavFor: '.cs_hero_slider_thumb',
+                    focusOnSelect: true,
+                    arrows: false,
+                    dots: false,
+                    vertical: true,
+                    infinite: true,
+                    responsive: [{
+                        breakpoint: 991,
+                        settings: {
+                            vertical: false,
+                            slidesToShow: 3,
+                        },
+                    }],
+                });
+            }
+        }
     }
 
     /*--------------------------------------------------------------

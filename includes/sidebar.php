@@ -7,14 +7,29 @@
 require_once __DIR__ . '/auth_check.php';
 $user = get_current_user_data();
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Determine dynamic avatar based on role
+$user_avatar = APP_URL . '/assets/img/team_1.jpg';
+if ($user) {
+    if ($user['role'] === 'doctor') {
+        $doc_record = fetchOne("SELECT avatar FROM doctors WHERE user_id = ?", [$user['id']]);
+        if ($doc_record && !empty($doc_record['avatar'])) {
+            $user_avatar = APP_URL . '/' . htmlspecialchars($doc_record['avatar']);
+        }
+    } elseif ($user['role'] === 'patient') {
+        $user_avatar = APP_URL . '/assets/img/team_2.jpg';
+    } elseif ($user['role'] === 'admin') {
+        $user_avatar = APP_URL . '/assets/img/team_4.jpg';
+    }
+}
 ?>
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-body text-center p-4 cs_blue_bg text-white rounded-top">
         <div class="mb-3">
-            <img src="<?php echo APP_URL; ?>/assets/img/team_1.jpg" class="rounded-circle border border-3 border-white shadow-sm" width="80" height="80" alt="User Profile">
+            <img src="<?php echo $user_avatar; ?>" class="rounded-circle border border-3 border-white shadow-sm object-fit-cover" width="80" height="80" alt="User Profile">
         </div>
-        <h5 class="mb-1 text-white"><?php echo htmlspecialchars($user['full_name'] ?? 'User'); ?></h5>
-        <span class="badge bg-info text-dark px-3 py-1 rounded-pill text-uppercase">
+        <h5 class="mb-1 text-white fw-bold"><?php echo htmlspecialchars($user['full_name'] ?? 'User'); ?></h5>
+        <span class="badge bg-info text-dark px-3 py-1 rounded-pill text-uppercase fw-semibold">
             <?php echo htmlspecialchars($user['role'] ?? 'Guest'); ?>
         </span>
     </div>
@@ -49,21 +64,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </a>
 
         <?php elseif ($user['role'] === 'doctor'): ?>
-            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php" class="list-group-item list-group-item-action py-3 <?php echo ($current_page == 'doctor_dashboard.php') ? 'active cs_blue_bg text-white' : ''; ?>">
+            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php" class="list-group-item list-group-item-action py-3 <?php echo ($current_page == 'doctor_dashboard.php' && (!isset($_GET['tab']) || $_GET['tab'] == 'overview')) ? 'active cs_blue_bg text-white' : ''; ?>">
                 <i class="fa-solid fa-user-doctor me-2"></i> Doctor Overview
             </a>
-            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php?tab=schedule" class="list-group-item list-group-item-action py-3">
+            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php?tab=schedule" class="list-group-item list-group-item-action py-3 <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'schedule') ? 'active cs_blue_bg text-white' : ''; ?>">
                 <i class="fa-solid fa-clock me-2"></i> My Availability Schedule
             </a>
-            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php?tab=appointments" class="list-group-item list-group-item-action py-3">
+            <a href="<?php echo APP_URL; ?>/frontend/doctor_dashboard.php?tab=appointments" class="list-group-item list-group-item-action py-3 <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'appointments') ? 'active cs_blue_bg text-white' : ''; ?>">
                 <i class="fa-solid fa-calendar-check me-2"></i> Patient Appointments
             </a>
 
         <?php elseif ($user['role'] === 'patient'): ?>
-            <a href="<?php echo APP_URL; ?>/frontend/patient_dashboard.php" class="list-group-item list-group-item-action py-3 <?php echo ($current_page == 'patient_dashboard.php' && !isset($_GET['tab'])) ? 'active cs_blue_bg text-white' : ''; ?>">
+            <a href="<?php echo APP_URL; ?>/frontend/patient_dashboard.php" class="list-group-item list-group-item-action py-3 <?php echo ($current_page == 'patient_dashboard.php' && (!isset($_GET['tab']) || $_GET['tab'] == 'dashboard')) ? 'active cs_blue_bg text-white' : ''; ?>">
                 <i class="fa-solid fa-user me-2"></i> My Dashboard
             </a>
-            <a href="<?php echo APP_URL; ?>/frontend/book_appointment.php" class="list-group-item list-group-item-action py-3">
+            <a href="<?php echo APP_URL; ?>/frontend/book_appointment.php" class="list-group-item list-group-item-action py-3 <?php echo ($current_page == 'book_appointment.php') ? 'active cs_blue_bg text-white' : ''; ?>">
                 <i class="fa-solid fa-plus-circle me-2"></i> Book New Appointment
             </a>
             <a href="<?php echo APP_URL; ?>/frontend/patient_dashboard.php?tab=appointments" class="list-group-item list-group-item-action py-3 <?php echo (isset($_GET['tab']) && $_GET['tab'] == 'appointments') ? 'active cs_blue_bg text-white' : ''; ?>">

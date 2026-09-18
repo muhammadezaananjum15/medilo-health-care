@@ -36,13 +36,13 @@ include_once __DIR__ . '/includes/header.php';
 
 <!-- Start Hero Section with Quick Search -->
 <section class="position-relative">
-    <div class="cs_hero_slider_thumb slick-slider">
+    <div class="cs_hero_slider_thumb">
         <div class="cs_hero_slider_thumb_item">
             <div class="cs_hero cs_style_1 cs_center cs_bg_filed" data-src="<?php echo APP_URL; ?>/assets/img/hero_slider_3.jpg">
                 <div class="container">
                     <div class="cs_hero_text">
                         <div class="cs_hero_text_in">
-                            <h1 class="cs_hero_title">Hospital & Doctor <span>Care Service.</span></h1>
+                            <h1 class="cs_hero_title">Hospital &amp; Doctor <span>Care Service.</span></h1>
                             <p class="cs_hero_subtitle">Book appointments with top-rated medical specialists near you. Access real-time availability, secure online payment, and electronic medical records.</p>
                             <div class="cs_hero_info">
                                 <h3>24/7 Medical Care Assistance</h3>
@@ -82,7 +82,35 @@ include_once __DIR__ . '/includes/header.php';
                 </div>
             </div>
         </div>
+        <div class="cs_hero_slider_thumb_item">
+            <div class="cs_hero cs_style_1 cs_center cs_bg_filed" data-src="<?php echo APP_URL; ?>/assets/img/hero_slider_1.jpg">
+                <div class="container">
+                    <div class="cs_hero_text">
+                        <div class="cs_hero_text_in">
+                            <h1 class="cs_hero_title">Expert Care <br>When You <span>Need It.</span></h1>
+                            <p class="cs_hero_subtitle">Connect with verified physicians, schedule visits in seconds, and manage your complete health journey &mdash; all in one trusted platform.</p>
+                            <div class="cs_hero_info">
+                                <h3>Trusted by 10,000+ Patients</h3>
+                                <p>Join Medilo Healthcare Today</p>
+                            </div>
+                            <div class="cs_hero_btns">
+                                <a class="cs_btn cs_style_1 cs_color_1" href="<?php echo APP_URL; ?>/auth/register.php">
+                                    <span>Get Started</span> <i class="fa-solid fa-angles-right"></i>
+                                </a>
+                                <a class="cs_btn cs_style_1 cs_color_2" href="<?php echo APP_URL; ?>/frontend/services.php">
+                                    <span>Our Services</span> <i class="fa-solid fa-angles-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- Hero Navigation Arrows & Dots -->
+    <div class="cs_hero_dots"></div>
+    <button class="cs_hero_prev_arrow" id="heroPrev" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="cs_hero_next_arrow" id="heroNext" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
 </section>
 <!-- End Hero Section -->
 

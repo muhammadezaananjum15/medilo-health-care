@@ -156,11 +156,16 @@ include_once __DIR__ . '/../includes/header.php';
                                                     <small class="text-muted fs-7"><?php echo htmlspecialchars($apt['payment_status']); ?></small>
                                                 </td>
                                                 <td>
-                                                    <?php if ($apt['status'] !== 'Cancelled' && $apt['status'] !== 'Completed'): ?>
-                                                        <a href="<?php echo APP_URL; ?>/frontend/patient_dashboard.php?action=cancel&apt_id=<?php echo $apt['id']; ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to cancel this appointment?');">
-                                                            Cancel
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="<?php echo APP_URL; ?>/frontend/appointment_confirmation.php?ref=<?php echo urlencode($apt['appointment_number']); ?>" class="btn btn-outline-primary" title="View & Print Digital Pass">
+                                                            <i class="fa-solid fa-receipt me-1"></i> Pass
                                                         </a>
-                                                    <?php endif; ?>
+                                                        <?php if ($apt['status'] !== 'Cancelled' && $apt['status'] !== 'Completed'): ?>
+                                                            <a href="<?php echo APP_URL; ?>/frontend/patient_dashboard.php?action=cancel&apt_id=<?php echo $apt['id']; ?>" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to cancel this appointment?');" title="Cancel Appointment">
+                                                                Cancel
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -304,6 +309,44 @@ include_once __DIR__ . '/../includes/header.php';
                             </div>
                         <?php else: ?>
                             <p class="text-muted mb-0">No upcoming appointments recorded.</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- System Notifications Card -->
+                    <div class="card border-0 shadow-sm rounded-3 p-4 mt-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                            <h5 class="mb-0 text-primary"><i class="fa-solid fa-bell me-2"></i> Recent System Notifications</h5>
+                            <?php if (count(array_filter($notifications, function($n) { return !$n['is_read']; })) > 0): ?>
+                                <a href="<?php echo APP_URL; ?>/frontend/mark_notification_read.php?action=mark_all" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa-solid fa-check-double me-1"></i> Mark All as Read
+                                </a>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if (count($notifications) > 0): ?>
+                            <div class="list-group list-group-flush">
+                                <?php foreach ($notifications as $notif): ?>
+                                    <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-start <?php echo !$notif['is_read'] ? 'bg-light rounded-3 px-3 my-1 border-start border-3 border-primary' : ''; ?>">
+                                        <div>
+                                            <h6 class="mb-1 fw-bold text-dark">
+                                                <?php if (!$notif['is_read']): ?>
+                                                    <span class="badge bg-primary me-1">New</span>
+                                                <?php endif; ?>
+                                                <?php echo htmlspecialchars($notif['title']); ?>
+                                            </h6>
+                                            <p class="mb-1 text-muted small"><?php echo htmlspecialchars($notif['message']); ?></p>
+                                            <small class="text-muted"><i class="fa-solid fa-clock me-1"></i> <?php echo date('M d, Y g:i A', strtotime($notif['created_at'])); ?></small>
+                                        </div>
+                                        <?php if (!$notif['is_read']): ?>
+                                            <a href="<?php echo APP_URL; ?>/frontend/mark_notification_read.php?id=<?php echo $notif['id']; ?>" class="btn btn-sm btn-link text-primary text-decoration-none" title="Mark as read">
+                                                <i class="fa-solid fa-check"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p class="text-muted mb-0">No notifications at this time.</p>
                         <?php endif; ?>
                     </div>
 

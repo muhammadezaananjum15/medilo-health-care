@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         $db->commit();
                         set_flash_message('success', 'Appointment successfully booked and paid! Booking Reference: ' . $appointment_number);
-                        header('Location: ' . APP_URL . '/frontend/patient_dashboard.php?tab=appointments');
+                        header('Location: ' . APP_URL . '/frontend/appointment_confirmation.php?ref=' . urlencode($appointment_number));
                         exit;
 
                     } catch (Exception $e) {
